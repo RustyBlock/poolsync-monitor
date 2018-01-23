@@ -1,0 +1,23 @@
+doctype html  
+html(lang='en')  
+ head
+   title #{title}
+   link(rel="stylesheet", href="c3/c3.min.css")
+   link(rel="stylesheet", href="style.css")
+ body
+  h1 #{subTitle}
+  div.container
+    div.chart
+      div#chart
+    p Chart description
+    ul
+      li Refresh every #{interval} seconds, history depth: 3 hours
+      li Top height: 100%; each block delay: -25%; minimum rating: 0%
+      li 
+        i Click legend to toggle chart lines
+  script(src="d3/d3.min.js")
+  script(src="c3/c3.min.js")
+  script.
+    var data = !{data};
+  script(src="custom.js")
+     

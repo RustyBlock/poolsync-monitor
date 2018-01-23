@@ -1,0 +1,65 @@
+{
+    "interval": 15,
+    "pools": [
+        {
+            "title": "ETN",
+            "url-type": "html",
+            "url": "https://blockexplorer.electroneum.com",
+            "path-to-height": "href=\"/block/"
+        },
+        {
+            "title": "RustyBlock",
+            "url-type": "json",
+            "url": "https://etn.rustylock.club:8118/stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "EasyHash.io",
+            "url-type": "json",
+            "url": "https://api-etn.easyhash.io/stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "exohash.com",
+            "url-type": "json",
+            "url": "https://api-etn.easyhash.io/stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "DarkMine",
+            "url-type": "json",
+            "url": "https://etn.dark-mine.su:11004//stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "MyMiningHub",
+            "url-type": "json",
+            "url": "https://etn.mymininghub.com/api/stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "SpacePools",
+            "url-type": "json",
+            "url": "https://etn.spacepools.org/api/cf_stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "Electromine",
+            "url-type": "json",
+            "url": "https://api.electromine.fr/stats",
+            "path-to-height": ["network", "height"]
+        },
+        {
+            "title": "HashVault",
+            "url-type": "json",
+            "url": "https://electroneum.hashvault.pro/api/network/stats",
+            "path-to-height": ["height"]
+        },
+        {
+            "title": "CryptoCoins",
+            "url-type": "json",
+            "url": "https://etn.crypto-coins.club/api/stats",
+            "path-to-height": ["network", "height"]
+        }
+    ]
+}
