@@ -57,7 +57,7 @@ app.get('/', function (req, res, next) {
         var html = template({ title: 'Daemon status', 
             subTitle: 'RustyBlock daemon monitor', 
             data: JSON.stringify(poolRatings),
-            interval: cfg.interval
+            interval: cfg['tick-interval-seconds']
          })
         res.send(html)
     } catch (e) {
@@ -76,7 +76,7 @@ cfg.pools.forEach(function(pool) {
 
 function collectStats() {
     
-    var counter = 0, 
+    var counter = 0, maxTicks = (cfg['max-history-hours'] - 1) * 60 * 60 / cfg['tick-interval-seconds'],
         heights = []; // prepare to load height information from each pool 
 
     cfg.pools.forEach(function(pool) {
@@ -148,17 +148,17 @@ function collectStats() {
 
             // save time for the current tick
             poolRatings.data.columns[0].push((new Date()).getTime());
-            if(poolRatings.data.columns[0].length > 720) {
+            if(poolRatings.data.columns[0].length > maxTicks) {
                 poolRatings.data.columns[0].splice(1, 
-                    poolRatings.data.columns[0].length - 720);
+                    poolRatings.data.columns[0].length - maxTicks);
             }
 
             hghts.forEach(function(itm) {
                 poolRatings.data.columns.some(function(col) {
                     if(col[0] === itm.title) {
                         col.push(itm.rating);
-                        if(col.length > 720) { // 3 hours
-                            col.splice(1, col.length - 720);
+                        if(col.length > maxTicks) { 
+                            col.splice(1, col.length - maxTicks);
                         }
                         return true;
                     }
@@ -166,7 +166,7 @@ function collectStats() {
                 });
             });
 
-            setTimeout(collectStats, cfg.interval * 1000);
+            setTimeout(collectStats, cfg['tick-interval-seconds'] * 1000);
         }
 
         console.info("Polling ", pool.url);
@@ -257,4 +257,4 @@ function compressedRequest (options, outStream, callback) {
         });
         poolRatings.grid.x.lines = blocks;
       });    
-  }, cfg.interval * 1000);
+  }, cfg['tick-interval-seconds'] * 1000);

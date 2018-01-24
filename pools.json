@@ -1,5 +1,6 @@
 {
-    "interval": 15,
+    "tick-interval-seconds": 15,
+    "max-history-hours": 3,
     "blocks": {
         "url-type": "json",
         "url": "https://api.nanopool.org/v1/etn/blocks/0/180"
