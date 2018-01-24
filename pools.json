@@ -1,11 +1,15 @@
 {
     "interval": 15,
+    "blocks": {
+        "url-type": "json",
+        "url": "https://api.nanopool.org/v1/etn/blocks/0/180"
+    },
     "pools": [
         {
             "title": "ETN",
             "url-type": "html",
             "url": "https://blockexplorer.electroneum.com",
-            "path-to-height": "href=\"/block/"
+            "path-to-height": ["/block/", "\""]
         },
         {
             "title": "RustyBlock",
@@ -20,10 +24,10 @@
             "path-to-height": ["network", "height"]
         },
         {
-            "title": "exohash.com",
+            "title": "Nanopool",
             "url-type": "json",
-            "url": "https://api-etn.easyhash.io/stats",
-            "path-to-height": ["network", "height"]
+            "url": "https://api.nanopool.org/v1/etn/network/lastblocknumber",
+            "path-to-height": ["data"]
         },
         {
             "title": "DarkMine",
@@ -32,10 +36,11 @@
             "path-to-height": ["network", "height"]
         },
         {
-            "title": "MyMiningHub",
-            "url-type": "json",
-            "url": "https://etn.mymininghub.com/api/stats",
-            "path-to-height": ["network", "height"]
+            "title": "MiningPoolHub",
+            "url-type": "html",
+            "url": "https://electroneum.miningpoolhub.com/index.php?page=statistics&action=pool",
+            "path-to-height": ["(Current: ", ")"],
+            "adjust": -1
         },
         {
             "title": "SpacePools",

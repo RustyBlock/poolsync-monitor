@@ -27,6 +27,14 @@ var express = require('express')
         },
         point: {
             show: false
+        },
+        subchart: {
+            show: true
+        },
+        grid: {
+            x: {
+                lines: []
+            }
         }
     }
   , cfg = JSON.parse(fs.readFileSync(__dirname + '/pools.json'))
@@ -49,7 +57,7 @@ app.get('/', function (req, res, next) {
         var html = template({ title: 'Daemon status', 
             subTitle: 'RustyBlock daemon monitor', 
             data: JSON.stringify(poolRatings),
-            interval: cfg.interval,
+            interval: cfg.interval
          })
         res.send(html)
     } catch (e) {
@@ -91,6 +99,9 @@ function collectStats() {
                 height = extractHeightFromHtml(data, poolitm);
             }
             if(height > 0) {
+                if(poolitm.adjust) {
+                    height += poolitm.adjust;
+                }
                 console.info(poolitm.url, "is at", height);
                 heights.push({ title: poolitm.title, height: height});
             }      
@@ -137,6 +148,10 @@ function collectStats() {
 
             // save time for the current tick
             poolRatings.data.columns[0].push((new Date()).getTime());
+            if(poolRatings.data.columns[0].length > 720) {
+                poolRatings.data.columns[0].splice(1, 
+                    poolRatings.data.columns[0].length - 720);
+            }
 
             hghts.forEach(function(itm) {
                 poolRatings.data.columns.some(function(col) {
@@ -184,14 +199,14 @@ function extractHeightFromJson(text, pool) {
 }
 
 function extractHeightFromHtml(text, pool) {
-    var blockIdx = text.indexOf(pool['path-to-height']);
+    var blockIdx = text.indexOf(pool['path-to-height'][0]);
     if(blockIdx === -1) {
         console.error('[', pool.url, '] Incorrect path to height field: ', pool['path-to-height']);
         return 0;
     }
     return Number.parseInt(text.substring(
-        blockIdx + pool['path-to-height'].length,
-        text.indexOf('"', blockIdx + pool['path-to-height'].indexOf('"') + 1)
+        blockIdx + pool['path-to-height'][0].length,
+        text.indexOf(pool['path-to-height'][1], blockIdx + pool['path-to-height'].length + 1)
     ), 10);
 }
 
@@ -218,3 +233,28 @@ function compressedRequest (options, outStream, callback) {
       callback(err);
     })
   }
+
+  setInterval(function(){
+    request(cfg.blocks, function (error, response, body) {
+        var blocks = [];
+
+        if(error) {
+            console.error('Failed to fetch network blocks:', error);
+            return;
+        }
+
+        if(response && response.statusCode !== 200) {
+            console.error('Blocks response is not 200:', response.statusCode);
+            return;
+        } else if(!response) {
+            console.error('No blocks response');
+            return;
+        }
+        JSON.parse(body).data.forEach(function(itm) {
+            var d = new Date(0);
+            d.setUTCSeconds(itm.date);
+            blocks.push({ value: d.getTime(), text: '#' + itm.number, position: 'start' });
+        });
+        poolRatings.grid.x.lines = blocks;
+      });    
+  }, cfg.interval * 1000);

@@ -7,6 +7,17 @@ html(lang='en')
  body
   h1 #{subTitle}
   div.container
+    div
+      span Time span:&nbsp;
+      a(href="#", onclick="scope(180);") All
+      |&nbsp;|&nbsp;
+      a(href="#", onclick="scope(120);") 2 hours
+      |&nbsp;|&nbsp;
+      a(href="#", onclick="scope(60);") 1 hour
+      |&nbsp;|&nbsp;
+      a(href="#", onclick="scope(30);") 30 min
+      |&nbsp;|&nbsp;
+      a(href="#", onclick="scope(15);") 15 min
     div.chart
       div#chart
     p Chart description
@@ -18,6 +29,6 @@ html(lang='en')
   script(src="d3/d3.min.js")
   script(src="c3/c3.min.js")
   script.
-    var data = !{data};
+    var interval = #{interval}, data = !{data};
   script(src="custom.js")
      
